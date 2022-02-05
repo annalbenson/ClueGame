@@ -2,6 +2,7 @@ package com.annabenson.cluegame;
 
 import android.os.Bundle;
 
+import com.annabenson.cluegame.cards.*;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +13,9 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import com.annabenson.cluegame.databinding.ActivityMainBinding;
 
@@ -72,5 +76,75 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+
+    public void startGame() {
+
+        // initialize all Characters, Rooms, and Weapons
+
+        List<Card> CharacterCards = initializeCharacters();
+        List<Card> RoomCards = initializeRooms();
+        List<Card> WeaponCards = initializeWeapons();
+
+        // create solution; get random from each
+
+
+        // shuffle remaining cards
+        List<Card> Deck = new ArrayList<>();
+        Deck.addAll(CharacterCards);
+        Deck.addAll(RoomCards);
+        Deck.addAll(WeaponCards);
+
+        // distribute cards to player and npcs
+
+        // ask player who they want to be
+
+    }
+
+    public ArrayList<Card> initializeCharacters(){
+
+        ArrayList<Card> CharacterCards = new ArrayList<Card>();
+
+        CharacterCards.add(new ColonelMustard()); // 1
+        CharacterCards.add(new MissScarlet()); // 2
+        CharacterCards.add(new MrGreen()); // 3
+        CharacterCards.add(new MrsPeacock()); // 4
+        CharacterCards.add(new MrsWhite()); // 5
+        CharacterCards.add(new ProfessorPlum()); // 6
+
+        return CharacterCards;
+    }
+
+    public ArrayList<Card> initializeRooms(){
+
+        ArrayList<Card> RoomCards = new ArrayList<Card>();
+
+        RoomCards.add(new Ballroom()); // 1
+        RoomCards.add(new BilliardRoom()); // 2
+        RoomCards.add(new Cellar()); // 3
+        RoomCards.add(new Conservatory()); // 4
+        RoomCards.add(new DiningRoom()); // 5
+        RoomCards.add(new Hall()); // 6
+        RoomCards.add(new Kitchen()); // 7
+        RoomCards.add(new Library()); // 8
+        RoomCards.add(new Lounge()); // 9
+        RoomCards.add(new Study()); // 10
+
+        return RoomCards;
+    }
+
+    public ArrayList<Card> initializeWeapons(){
+
+        ArrayList<Card> WeaponCards = new ArrayList<Card>();
+
+        WeaponCards.add(new Candlestick()); // 1
+        WeaponCards.add(new Knife()); // 2
+        WeaponCards.add(new LeadPipe()); // 3
+        WeaponCards.add(new Revolver()); // 4
+        WeaponCards.add(new Rope()); // 5
+        WeaponCards.add(new Wrench()); // 6
+
+        return WeaponCards;
     }
 }
