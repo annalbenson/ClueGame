@@ -1,0 +1,153 @@
+.game-layout {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    padding: 2rem;
+    gap: 2rem;
+}
+
+.player-character-panel {
+    flex: 1.2;
+    height: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 1.5rem;
+    border-radius: 10px;
+    color: var(--text-color);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.player-character-panel img {
+    width: 100%;
+    max-width: 250px;
+    border-radius: 10px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.player-hand {
+    margin-top: 2rem;
+}
+
+.card-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.card-item {
+    text-align: center;
+    width: 100px;
+}
+
+.card-item img {
+    border-radius: 6px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.guesses-panel {
+    flex: 1.5;
+    height: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 1.5rem;
+    border-radius: 10px;
+    color: var(--text-color);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.guess-history {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.guess-history th,
+.guess-history td {
+    padding: 0.6rem 0.8rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.guess-history thead {
+    background-color: var(--secondary-color, #4A5C64);
+    color: var(--text-color, #F1F1F1);
+}
+
+.guess-history tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.guess-history tbody tr.correct {
+    background-color: rgba(0, 255, 0, 0.1);
+    font-weight: bold;
+}
+
+.guess-history tbody tr.incorrect {
+    background-color: rgba(255, 0, 0, 0.05);
+}
+
+.location-panel {
+    flex: 1.5;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    height: auto;
+    gap: 2rem;
+    padding: 1rem;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.room-panel img {
+    width: 100%;
+    max-width: 250px;
+    border-radius: 10px;
+}
+
+.action-panel {
+    flex: 1;
+    padding: 1.5rem;
+    border-radius: 10px;
+    color: var(--text-color);
+    background-color: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+form .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+form label {
+    margin-bottom: 0.3rem;
+    font-weight: bold;
+}
+
+form select,
+form input[type="checkbox"] {
+    padding: 0.4rem;
+    font-size: 1rem;
+}
+
+.opponents-panel {
+    flex: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 1.5rem;
+    border-radius: 10px;
+    color: var(--text-color);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.opponents-panel img {
+    width: 100%;
+    max-width: 100px;
+    border-radius: 10px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}

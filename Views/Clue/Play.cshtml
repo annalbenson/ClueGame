@@ -1,0 +1,171 @@
+@model ClueGame.Models.Game
+
+@{
+    var humanPlayer = Model.Players.First(p => p.CharacterCardId == Model.HumanCharacterId);
+    var playerTitle = humanPlayer.Name.Split()[0];
+    var playerSurname = humanPlayer.Name.Split()[1];
+}
+
+<h4>Game started at: @Model.StartedAt</h4>
+
+<div class="game-layout">
+    <div class="player-character-panel">
+
+        <img src="~/images/characters/@Model.HumanCharacter.ImageFileName" alt="@Model.HumanCharacter.Name" />
+        <h2>@Model.HumanCharacter?.Name</h2>
+
+        <div class="player-hand">
+            <h4>Your Cards</h4>
+            <div class="card-grid">
+                @foreach (var card in humanPlayer.Cards.Select(c => c.Card))
+                {
+                    <div class="card-item">
+                        @switch (@card.Type)
+                        {
+                            case ClueGame.Models.Enums.CardType.Suspect:
+                                <img src="~/images/characters/@card.ImageFileName" alt="@card.Name" />
+                                break;
+                            case ClueGame.Models.Enums.CardType.Weapon:
+                                <img src="~/images/weapons/@card.ImageFileName" alt="@card.Name" />
+                                break;
+                            case ClueGame.Models.Enums.CardType.Room:
+                                <img src="~/images/rooms/@card.ImageFileName" alt="@card.Name" />
+                                break;
+                        }
+                        <h5>@card.Name</h5>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="guesses-panel">
+        <h3>Past Guesses</h3>
+        <table class="guess-history">
+            <tr>
+                <th>Time</th>
+                <th>Player</th>
+                <th>Suspect</th>
+                <th>Weapon</th>
+                <th>Room</th>
+                <th>Correct?</th>
+                <th>Disproved By Player</th>
+                <th>Disproved By Card</th>
+            </tr>
+            @foreach (var a in Model.Accusations.OrderByDescending(a => a.Timestamp))
+            {
+                <tr>
+                    <td>@a.Timestamp.ToShortTimeString()</td>
+                    <td>@a.AccusingPlayer.Name</td>
+                    <td>@a.SuspectCard?.Name</td>
+                    <td>@a.WeaponCard?.Name</td>
+                    <td>@a.RoomCard?.Name</td>
+                    <td>@(a.IsCorrect ? "✔️" : "❌")</td>
+                    <td>
+                        @if (a.DisprovingPlayer != null)
+                        {
+                            <span>@a.DisprovingPlayer.CharacterCard.Name</span>
+                        }
+                        else
+                        {
+                            <span>n/a</span>
+                        }
+                    </td>
+                    <td>
+                        @if (a.DisprovingCard != null)
+                        {
+                            <span>@a.DisprovingCard.Name</span>
+                        }
+                        else
+                        {
+                            <span>n/a</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </table>
+
+    </div>
+
+    <div class="location-panel">
+
+        <div class="room-panel">
+            <img src="~/images/rooms/@humanPlayer.PlayerRoom.ImageFileName" alt="@humanPlayer.PlayerRoom.Name" />
+        </div>
+
+        <div class="action-panel">
+            <h3>You are in the <strong>@humanPlayer.PlayerRoom.Name</strong></h3>
+
+            @if (Model.CurrentTurnPlayerId == humanPlayer.Id)
+            {
+                <!-- Show accusation form -->
+
+                <h5>You may move to an adjacent room or make an accusation.</h5>
+
+                <h3>Nearby Rooms</h3>
+
+                <ul>
+                    @foreach (var room in ViewBag.AdjacentRooms as List<Card>)
+                    {
+                        <li>
+                            <form method="post" asp-action="MoveRoom">
+                                <input type="hidden" name="gameId" value="@Model.Id" />
+                                <input type="hidden" name="targetRoomId" value="@room.Id" />
+                                <button type="submit">@room.Name</button>
+                            </form>
+                        </li>
+                    }
+                </ul>
+
+                <h3>Make an Accusation</h3>
+
+                <form method="post" asp-action="SubmitGuess">
+                    <input type="hidden" name="gameId" value="@ViewBag.GameId" />
+                    <input type="hidden" name="roomId" value="@humanPlayer.PlayerRoomId" />
+
+                    <div class="form-group">
+                        <label><strong>Suspect:</strong></label>
+                        <select name="suspectId">
+                            @foreach (var s in ViewBag.Suspects)
+                            {
+                                <option value="@s.Id">@s.Name</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label><strong>Weapon:</strong></label>
+                        <select name="weaponId">
+                            @foreach (var w in ViewBag.Weapons)
+                            {
+                                <option value="@w.Id">@w.Name</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label><strong>Room:</strong> @humanPlayer.PlayerRoom.Name</label>
+                    </div>
+
+                    <button type="submit">Accuse!</button>
+                </form>
+            }
+        </div>
+
+    </div>
+
+    <div class="opponents-panel">
+        <h2>Your Opponents</h2>
+        <ul>
+            @foreach (var npc in ViewBag.NpcPlayers as List<ClueGame.Models.Player>)
+            {
+                <div class="players-individual">
+                    <img src="~/images/characters/@npc.CharacterCard.ImageFileName" alt="@npc.CharacterCard.Name" />
+                    <h4>@npc.CharacterCard.Name</h4>
+                    <h5>is in the @npc.PlayerRoom.Name</h5>
+                </div>
+            }
+        </ul>
+    </div>
+</div>
+
+<hr>

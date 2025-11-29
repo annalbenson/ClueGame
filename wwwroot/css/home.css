@@ -1,0 +1,113 @@
+body {
+    background-image: url('/images/backgrounds/clue-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    color: #F5F5F5;
+}
+
+.home-container {
+    background-color: rgba(0, 0, 0, 0.6); /* dark translucent overlay */
+    padding: 2rem;
+    margin: 3rem auto;
+    max-width: 600px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.7);
+    text-align: center;
+}
+
+button {
+    background-color: var(--primary-color);
+    color: var(--bg-color);
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: var(--highlight-color);
+}
+
+.character-select {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.character-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    border: 2px solid transparent;
+    padding: 10px;
+    border-radius: 10px;
+    transition: border-color 0.2s;
+}
+
+.character-option img {
+    width: 225px;         
+    height: auto;
+    object-fit: cover;   
+    border-radius: 6px;  /* soft corners */
+    border: 5px solid var(--secondary-color);
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2); /* shadow */
+}
+
+
+.character-option input[type="radio"] {
+    display: none;
+}
+
+.character-option:hover,
+.character-option input[type="radio"]:checked + img {
+    outline: 2px solid var(--primary-color);
+}
+
+.character-option span {
+    margin-top: 0.5rem;
+    font-weight: bold;
+}
+
+.game-select {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.game-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    border: 2px solid transparent;
+    padding: 10px;
+    border-radius: 10px;
+    transition: border-color 0.2s;
+}
+
+.game-option img {
+    width: 100px;         
+    height: auto;
+    object-fit: cover;   
+    border-radius: 6px;  /* soft corners */
+    border: 5px solid var(--secondary-color);
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2); /* shadow */
+}
+
+
+.game-option input[type="radio"] {
+    display: none;
+}
+
+.game-option:hover,
+.game-option input[type="radio"]:checked + img {
+    outline: 2px solid var(--primary-color);
+}
+
+.game-option span {
+    margin-top: 0.5rem;
+    font-weight: bold;
+}

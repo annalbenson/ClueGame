@@ -1,0 +1,65 @@
+﻿@{
+    ViewData["Title"] = "Clue Game";
+    var suspects = ViewBag.Suspects as List<ClueGame.Models.Card>;
+    var recentGames = ViewBag.RecentGames as List<ClueGame.Models.Game>;
+    var playerStats = ViewBag.PlayerStats as PlayerStats;
+}
+
+<div class action="home-containers">
+    <h1 class="game-title">Welcome to Clue</h1>
+    
+    
+    <h4>Select your character and begin your investigation:</h4>
+    <form method="post" asp-action="StartGame">
+        <div class="character-select">
+            @foreach (var character in suspects)
+            {
+                <label class="character-option">
+                    <input type="radio" name="playerCharacterId" value="@character.Id" required />
+                    <img src="~/images/characters/@character.ImageFileName" alt="@character.Name" />
+                    <span>@character.Name</span>
+                </label>
+            }
+        </div>
+        <button type="submit" class="btn btn-primary">Start New Game</button>
+    </form>
+
+    <hr>
+
+    <h4>Resume an investigation:</h4>
+        <div class="game-select">
+            @foreach (var game in recentGames)
+            {
+                <label class="game-option">
+                    <form method="post" asp-action="DeleteGame">
+                        <input type="hidden" name="gameId" value="@game.Id" required />
+                        <button type="submit" class="btn btn-primary">Delete ❌</button>  
+                    </form>
+                    <form method="post" asp-action="LoadGame">
+                        <input type="hidden" name="gameId" value="@game.Id" required />
+                        <button type="submit" class="btn btn-primary">Load ✔️</button>
+                    </form>
+                    
+                    <img src="~/images/characters/@game.HumanCharacter.ImageFileName" alt="@game.HumanCharacter.Name" />
+                    <span>Playing as @game.HumanCharacter.Name</span>
+                    <span>Game started at @game.StartedAt</span>
+                    <span>Accusations made: @game.Accusations.Count</span>
+                </label>
+            }
+        </div>
+
+    <hr>
+
+    <h4>Recent Player Stats:</h4>
+    @if(@playerStats != null){
+        if(playerStats.AvgAccusations == 0 || playerStats.AvgStepsTaken == 0){
+            <p>Avg. Accusations: n/a</p>
+            <p>Avg. Steps Taken: n/a</p>
+        }
+        else{
+            <p>Avg. Accusations:@{ @playerStats?.AvgAccusations } </p>
+            <p>Avg. Steps Taken: @playerStats?.AvgStepsTaken</p>
+        }
+    }
+
+</div>
