@@ -51,15 +51,16 @@
     <hr>
 
     <h4>Recent Player Stats:</h4>
-    @if(@playerStats != null){
-        if(playerStats.AvgAccusations == 0 || playerStats.AvgStepsTaken == 0){
-            <p>Avg. Accusations: n/a</p>
-            <p>Avg. Steps Taken: n/a</p>
-        }
-        else{
-            <p>Avg. Accusations:@{ @playerStats?.AvgAccusations } </p>
-            <p>Avg. Steps Taken: @playerStats?.AvgStepsTaken</p>
-        }
+    @if ((int)ViewBag.FinishedGameCount == 0)
+    {
+        <p>Avg. Accusations: n/a</p>
+        <p>Avg. Steps Taken: n/a</p>
+    }
+    else
+    {
+        <p>Avg. Accusations: @playerStats.AvgAccusations</p>
+        <p>Avg. Steps Taken: @playerStats.AvgStepsTaken</p>
+        <p><small>Based on last @ViewBag.FinishedGameCount completed game(s)</small></p>
     }
 
 </div>

@@ -115,6 +115,13 @@ public class ClueController : Controller
             return NotFound();
         }
 
+        // move the named suspect to the guessed room
+        var suspectedPlayer = game.Players.FirstOrDefault(p => p.CharacterCardId == suspectId);
+        if (suspectedPlayer != null)
+        {
+            suspectedPlayer.PlayerRoomId = roomId;
+        }
+
         var accusation = new Accusation
         {
             AccusingPlayerId = game.CurrentTurnPlayerId.Value,
@@ -174,6 +181,14 @@ public class ClueController : Controller
             {
                 // else, make a guess
                 var accusation = await GenerateNPCGuess(game, currentPlayer);
+
+                // move the named suspect to the npc's room
+                var suspectedPlayer = game.Players.FirstOrDefault(p => p.CharacterCardId == accusation.SuspectCardId);
+                if (suspectedPlayer != null)
+                {
+                    suspectedPlayer.PlayerRoomId = accusation.RoomCardId;
+                }
+
                 // check if that guess is correct or disprove
                 CheckAccusation(accusation, game);
 

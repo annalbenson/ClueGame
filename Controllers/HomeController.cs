@@ -33,13 +33,29 @@ public class HomeController : Controller
         ViewBag.RecentGames = recentActiveGames;
 
         // stats calculation
-        var recentFinishedGames = await _context.Games.Where(g => g.FinishedAt != null).OrderByDescending(g => g.StartedAt).Take(10).ToListAsync();
+        var recentFinishedGames = await _context.Games
+            .Where(g => g.FinishedAt != null)
+            .Include(g => g.Players)
+            .Include(g => g.Accusations)
+            .OrderByDescending(g => g.StartedAt)
+            .Take(10)
+            .ToListAsync();
 
-        var accusations = recentFinishedGames.Select(g => g.Accusations);
-        var avgAccusations = accusations.Select(a => a.Count).Sum() / 10;
+        int finishedCount = recentFinishedGames.Count;
+        int avgAccusations = 0;
+        int avgStepsTaken = 0;
 
-        var avgStepsTaken = recentFinishedGames.Select(g => g.StepsTaken).Sum() / 10;
+        if (finishedCount > 0)
+        {
+            avgAccusations = recentFinishedGames.Select(g => {
+                var humanPlayer = g.Players.FirstOrDefault(p => p.CharacterCardId == g.HumanCharacterId);
+                return humanPlayer != null ? g.Accusations.Count(a => a.AccusingPlayerId == humanPlayer.Id) : 0;
+            }).Sum() / finishedCount;
 
+            avgStepsTaken = recentFinishedGames.Select(g => g.StepsTaken).Sum() / finishedCount;
+        }
+
+        ViewBag.FinishedGameCount = finishedCount;
         ViewBag.PlayerStats = new PlayerStats { AvgAccusations = avgAccusations, AvgStepsTaken = avgStepsTaken };
 
         return View();

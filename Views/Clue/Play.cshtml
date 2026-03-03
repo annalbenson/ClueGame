@@ -4,9 +4,58 @@
     var humanPlayer = Model.Players.First(p => p.CharacterCardId == Model.HumanCharacterId);
     var playerTitle = humanPlayer.Name.Split()[0];
     var playerSurname = humanPlayer.Name.Split()[1];
+    var allRooms = ViewBag.Rooms as List<ClueGame.Models.Card>;
+    var adjacentRooms = ViewBag.AdjacentRooms as List<ClueGame.Models.Card>;
+    var adjacentRoomIds = adjacentRooms.Select(r => r.Id).ToHashSet();
+    var isHumanTurn = Model.CurrentTurnPlayerId == humanPlayer.Id;
+    var secretPassagePairs = new HashSet<(string, string)> {
+        ("Kitchen", "Study"), ("Study", "Kitchen"),
+        ("Conservatory", "Lounge"), ("Lounge", "Conservatory")
+    };
 }
 
 <h4>Game started at: @Model.StartedAt</h4>
+
+<div class="board-map">
+    @foreach (var room in allRooms)
+    {
+        var roomSlug = room.Name.Replace(" ", "").Replace(".", "").ToLower();
+        var isCurrentRoom = room.Id == humanPlayer.PlayerRoomId;
+        var isAdjacent = adjacentRoomIds.Contains(room.Id);
+        var isSecretPassage = isAdjacent && secretPassagePairs.Contains((humanPlayer.PlayerRoom.Name, room.Name));
+        var playersInRoom = Model.Players.Where(p => p.PlayerRoomId == room.Id).ToList();
+
+        <div class="room-tile room-@roomSlug @(isCurrentRoom ? "current-room" : "") @(isAdjacent ? "adjacent-room" : "")">
+            <img src="~/images/rooms/@room.ImageFileName" alt="@room.Name" />
+            <span class="room-label">@room.Name @(isSecretPassage ? "🔑" : "")</span>
+
+            @if (playersInRoom.Any())
+            {
+                <div class="room-tokens">
+                    @foreach (var player in playersInRoom)
+                    {
+                        <img src="~/images/characters/@player.CharacterCard.ImageFileName"
+                             alt="@player.CharacterCard.Name"
+                             class="player-token @(player.CharacterCardId == Model.HumanCharacterId ? "human-token" : "npc-token")"
+                             title="@player.CharacterCard.Name" />
+                    }
+                </div>
+            }
+
+            @if (isAdjacent && isHumanTurn)
+            {
+                <form method="post" asp-action="MoveRoom" class="move-form">
+                    <input type="hidden" name="gameId" value="@Model.Id" />
+                    <input type="hidden" name="targetRoomId" value="@room.Id" />
+                    <button type="submit" class="move-btn">Move Here</button>
+                </form>
+            }
+        </div>
+    }
+    <div class="room-tile room-center">
+        <span class="center-label">Clue</span>
+    </div>
+</div>
 
 <div class="game-layout">
     <div class="player-character-panel">
