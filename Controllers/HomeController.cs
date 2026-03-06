@@ -29,7 +29,7 @@ public class HomeController : Controller
         ViewBag.Suspects = await _context.Cards.Where(c => c.Type == CardType.Suspect).ToListAsync();
 
         // load game selection
-        var recentActiveGames = await _context.Games.Where(g => g.FinishedAt == null).OrderByDescending(g => g.StartedAt).Take(3).ToListAsync();
+        var recentActiveGames = await _context.Games.Where(g => g.FinishedAt == null).Include(g => g.Accusations).OrderByDescending(g => g.StartedAt).Take(3).ToListAsync();
         ViewBag.RecentGames = recentActiveGames;
 
         // stats calculation

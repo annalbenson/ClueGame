@@ -48,7 +48,7 @@ button:hover {
 }
 
 .character-option img {
-    width: 225px;         
+    width: 140px;
     height: auto;
     object-fit: cover;   
     border-radius: 6px;  /* soft corners */
